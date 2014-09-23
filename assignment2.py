@@ -68,10 +68,19 @@ def firefox_url_history():
 
     for row in hist_cursor.execute('SELECT datetime(moz_historyvisits.visit_date/1000000,"unixepoch"), moz_places.url FROM moz_places, moz_historyvisits WHERE moz_places.id = moz_historyvisits.place_id'):
         print row
-    conn.close()
-    
+    conn.close()  
+
+
+#################################################
+#            print out the usage 
+#################################################
+def usage():
+    print "Usage: %s {wtmp|priv_esc|firefox|mysql}" % sys.argv[0]
+    sys.exit(1)
 
 if __name__ == '__main__':
+  if len(sys.argv) == 1:
+    usage()
   if sys.argv[1] == "wtmp":
     list_wtmp()
   elif sys.argv[1] == "priv_esc":
@@ -81,5 +90,4 @@ if __name__ == '__main__':
   elif sys.argv[1] == "mysql":
     pass
   else:
-   print "Usage: %s {wtmp|priv_esc|firefox|mysql}" % sys.argv[0]
-
+    usage()
