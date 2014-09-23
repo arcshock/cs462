@@ -63,13 +63,11 @@ def list_secure_log():
 #             reading firefox urls
 #################################################
 def firefox_url_history():
-    conn = sqlite3.connect('/home/voot/.mozilla/firefox/kgo7pyob.default/places.sqlite')
+    conn = sqlite3.connect('/home/voot/.mozilla/firefox/swpficl5.default/places.sqlite')
     hist_cursor = conn.cursor()
 
-    for row in hist_cursor.execute('SELECT datetime(moz_historyvisits.visit_date/1000000,"unixepoch"), moz_places.url'
-                                   'FROM moz_places, moz_historyvisits'
-                                   'WHERE moz_places.id = moz_historyvisits.place_id'):
-        print row.len()
+    for row in hist_cursor.execute('SELECT datetime(moz_historyvisits.visit_date/1000000,"unixepoch"), moz_places.url FROM moz_places, moz_historyvisits WHERE moz_places.id = moz_historyvisits.place_id'):
+        print row
     conn.close()
     
 
@@ -79,7 +77,7 @@ if __name__ == '__main__':
   elif sys.argv[1] == "priv_esc":
     list_secure_log()
   elif sys.argv[1] == "firefox":
-    pass
+    firefox_url_history()
   elif sys.argv[1] == "mysql":
     pass
   else:
