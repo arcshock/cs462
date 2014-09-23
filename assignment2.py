@@ -5,6 +5,9 @@ import sys
 import pwd
 import time
 
+################################################
+#           user logins
+################################################
 def getrecord(file,uid, preserve = False):
   """Returns [int(unix_time),string(device),string(host)] from the lastlog formated file object, set preserve = True to preserve your position within the file"""
   position = file.tell()
@@ -39,6 +42,32 @@ def list_wtmp():
       pass
   llfile.close()
 
+#################################################
+#             reading secure log
+#################################################
+def list_secure_log():
+  secure_path = "/var/log/secure"
+  rfile = open(secure_path, "r")
+  lines = rfile.readlines()
+  rfile.close()
+  sudo_lines = []
+  for i in lines:
+    if "sudo" in i:
+      sudo_lines.append(i[:-1])
+
+  for i in sudo_lines:
+    print i
+
+
 if __name__ == '__main__':
-  list_wtmp()
+  if sys.argv[1] == "wtmp":
+    list_wtmp()
+  elif sys.argv[1] == "priv_esc":
+    list_secure_log()
+  elif sys.argv[1] == "firefox":
+    pass
+  elif sys.argv[1] == "mysql":
+    pass
+  else:
+   print "Usage: %s {wtmp|priv_esc|firefox|mysql}" % sys.argv[0]
 
