@@ -4,6 +4,7 @@ import struct
 import sys
 import pwd
 import time
+import sqlite3
 
 ################################################
 #           user logins
@@ -58,6 +59,19 @@ def list_secure_log():
   for i in sudo_lines:
     print i
 
+#################################################
+#             reading firefox urls
+#################################################
+def firefox_url_history():
+    conn = sqlite3.connect('/home/voot/.mozilla/firefox/kgo7pyob.default/places.sqlite')
+    hist_cursor = conn.cursor()
+
+    for row in hist_cursor.execute('SELECT datetime(moz_historyvisits.visit_date/1000000,"unixepoch"), moz_places.url'
+                                   'FROM moz_places, moz_historyvisits'
+                                   'WHERE moz_places.id = moz_historyvisits.place_id'):
+        print row.len()
+    conn.close()
+    
 
 if __name__ == '__main__':
   if sys.argv[1] == "wtmp":
