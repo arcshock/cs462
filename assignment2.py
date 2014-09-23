@@ -63,13 +63,22 @@ def list_secure_log():
 #             reading firefox urls
 #################################################
 def firefox_url_history():
+    """sqlite3 query based off of query from www.alekz.net/archives/740"""
+    db_query = ("SELECT datetime(moz_historyvisits.visit_date/1000000,\"unixepoch\"), moz_places.url "
+                "FROM moz_places, moz_historyvisits "
+                "WHERE moz_places.id = moz_historyvisits.place_id")
+
     conn = sqlite3.connect('/home/voot/.mozilla/firefox/swpficl5.default/places.sqlite')
     hist_cursor = conn.cursor()
 
-    for row in hist_cursor.execute('SELECT datetime(moz_historyvisits.visit_date/1000000,"unixepoch"), moz_places.url FROM moz_places, moz_historyvisits WHERE moz_places.id = moz_historyvisits.place_id'):
+    for row in hist_cursor.execute(db_query):
         print row
     conn.close()  
 
+
+#################################################
+#            reading MySQL logs 
+#################################################
 
 #################################################
 #            print out the usage 
