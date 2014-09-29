@@ -7,7 +7,8 @@ readonly PROGNAME=$(basename @0)
 readonly PROGDIR=$(readlink -m $(dirname $0))
 readonly ARGS="$@"
 
-read -d DB_QUERY <<EOF
+# Some reason this is failing...
+read -d '' DB_QUERY <<EOF
 'SELECT datetime(moz_historyvisits.visit_date/1000000,"unixepoch"), moz_places.url FROM moz_places, moz_historyvisits WHERE moz_places.id = moz_historyvisits.place_id;'
 EOF
 
@@ -23,7 +24,7 @@ main() {
 			CONFIG=$FIREFOX_DIR$(grep -i path $FIREFOX_PROFILE | awk -F= '{print $2}')
 			cd $CONFIG
 			DB=$CONFIG'/places.sqlite'
-			echo "$(sqlite3 $DB 'SELECT datetime(moz_historyvisits.visit_date/1000000,"unixepoch"), moz_places.url FROM moz_places, moz_historyvisits WHERE moz_places.id = moz_historyvisits.place_id ORDER by visit_date;')"
+			sqlite3 $DB 'SELECT datetime(moz_historyvisits.visit_date/1000000,"unixepoch"), moz_places.url FROM moz_places, moz_historyvisits WHERE moz_places.id = moz_historyvisits.place_id ORDER by visit_date;'
 		fi
 	done
 

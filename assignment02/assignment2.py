@@ -6,6 +6,9 @@ import pwd
 import os
 import time
 import sqlite3
+import os
+import time
+import datetime
 
 ################################################
 #           user logins
@@ -53,22 +56,21 @@ def list_secure_log():
 #             reading firefox urls
 #################################################
 def firefox_url_history():
-    """sqlite3 query based off of query from www.alekz.net/archives/740"""
-    db_query = ("SELECT datetime(moz_historyvisits.visit_date/1000000,\"unixepoch\"), moz_places.url "
-                "FROM moz_places, moz_historyvisits "
-                "WHERE moz_places.id = moz_historyvisits.place_id")
+    """Call a shell script to get all the url history from user home dirs"""
+    os.system("./firefox_hist.sh")
 
-    conn = sqlite3.connect('/home/voot/.mozilla/firefox/swpficl5.default/places.sqlite')
-    hist_cursor = conn.cursor()
-
-    for row in hist_cursor.execute(db_query):
-        print row
-    conn.close()  
+#################################################
+#            Outputing battery log 
+#################################################
+def battery_log():
+    """Takes the csv file from an android app to output"""
+    os.system("./battery_log.sh")
 
 
 #################################################
-#            reading MySQL logs 
+#            open file for writing 
 #################################################
+def
 
 #################################################
 #            print out the usage 
@@ -78,6 +80,7 @@ def usage():
     sys.exit(1)
 
 if __name__ == '__main__':
+  output_file = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
   if len(sys.argv) == 1:
     usage()
   if sys.argv[1] == "wtmp":
@@ -86,7 +89,7 @@ if __name__ == '__main__':
     list_secure_log()
   elif sys.argv[1] == "firefox":
     firefox_url_history()
-  elif sys.argv[1] == "mysql":
-    pass
+  elif sys.argv[1] == "battery":
+    battery_log()
   else:
     usage()
